@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Lunchi</string>
+    <string name="error_getting_authentication">No fue posible iniciar Lunchi. Por favor intentelo más tarde.</string>
 </resources>

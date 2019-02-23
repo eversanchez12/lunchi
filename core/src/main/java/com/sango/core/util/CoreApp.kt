@@ -12,8 +12,8 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
 
 /**
- * Created by rodrigomiranda on 9/27/18.
- * Applaudo Studios
+ * Singleton app to init variables and get a retrofit
+ * instance
  */
 open class CoreApp : Application() {
 
