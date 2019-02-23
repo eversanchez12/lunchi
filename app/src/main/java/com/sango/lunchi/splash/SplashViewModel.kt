@@ -3,6 +3,9 @@ package com.sango.lunchi.splash
 import android.arch.lifecycle.ViewModel
 import android.databinding.ObservableField
 import android.view.View
+import com.sango.core.db.AppDb
+import com.sango.core.repository.AccessTokenRepository
+import com.sango.core.util.CoreApp
 
 /**
  * ViewModel to handle the interaction between
@@ -10,6 +13,10 @@ import android.view.View
  */
 class SplashViewModel : ViewModel() {
 
-    val errorVisibility: ObservableField<Int> = ObservableField(View.INVISIBLE)
+    var accessTokenRepository = AccessTokenRepository(
+        AppDb.instance(CoreApp.instance).accessTokenDao(),
+        CoreApp.instance.provideRetrofit()
+    )
 
+    var errorVisibility: ObservableField<Int> = ObservableField(View.INVISIBLE)
 }
