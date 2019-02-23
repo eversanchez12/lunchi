@@ -9,37 +9,28 @@ import com.google.gson.annotations.SerializedName
  * request
  */
 data class ApiError(
-
-    @SerializedName("statusCode")
-    val statusCode: Int?,
-    @SerializedName("error")
+    @SerializedName("code")
     val error: String?,
-    @SerializedName("message")
-    val message: String?
-
+    @SerializedName("messages")
+    val message: List<String> = arrayListOf()
 ) : Parcelable {
-
-    constructor() : this(
-            0,
-            "",
-            "")
-
-    constructor(parcel: Parcel) : this(
-            parcel.readValue(Int::class.java.classLoader) as? Int,
-            parcel.readString(),
-            parcel.readString())
-
-    override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeValue(statusCode)
-        parcel.writeString(error)
-        parcel.writeString(message)
-    }
+    constructor(source: Parcel) : this(
+        source.readString(),
+        source.createStringArrayList()
+    )
 
     override fun describeContents() = 0
 
-    companion object CREATOR : Parcelable.Creator<ApiError> {
-        override fun createFromParcel(parcel: Parcel) = ApiError(parcel)
+    override fun writeToParcel(dest: Parcel, flags: Int) = with(dest) {
+        writeString(error)
+        writeStringList(message)
+    }
 
-        override fun newArray(size: Int): Array<ApiError?> = arrayOfNulls(size)
+    companion object {
+        @JvmField
+        val CREATOR: Parcelable.Creator<ApiError> = object : Parcelable.Creator<ApiError> {
+            override fun createFromParcel(source: Parcel): ApiError = ApiError(source)
+            override fun newArray(size: Int): Array<ApiError?> = arrayOfNulls(size)
+        }
     }
 }

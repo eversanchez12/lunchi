@@ -68,7 +68,7 @@ data class ApiSuccessResponse<T>(
             } else {
                 try {
                     Integer.parseInt(matcher.group(1))
-                } catch (ex: NumberFormatException) {
+                } catch (ex: Throwable) {
                     Log.d(ApiEmptyResponse::class.java.name, "cannot parse next page")
                     null
                 }
