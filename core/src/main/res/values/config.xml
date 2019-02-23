@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="base_url">Inserte aca la url base</string>
+    <string name="client_id">Inserte aca el client id</string>
+    <string name="client_secret">Inserte aca el client secret</string>
+    <string name="image_base_url">Inserte aca la url base para las imagines</string>
+</resources>
