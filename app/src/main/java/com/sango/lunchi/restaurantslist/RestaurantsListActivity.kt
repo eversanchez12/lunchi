@@ -19,6 +19,7 @@ import android.util.Log
 import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.Toast
+import com.sango.core.model.AccessToken
 import com.sango.lunchi.R
 import com.sango.lunchi.databinding.ActivityRestaurantListBinding
 import com.sango.lunchi.restaurantslist.RestaurantsListViewModel.Companion.CHANGE_LOCATION_EVENT
@@ -52,8 +53,9 @@ class RestaurantsListActivity : AppCompatActivity() {
             currentLat = location.latitude
             currentLng = location.longitude
 
-            //Request the restaurant
-            requestRestaurants()
+            //Request the access token
+            viewModel.accessTokenRepository.queryAccessToken()
+                .observe(this@RestaurantsListActivity, getAccessTokenObserver())
 
             //Remove the location updates
             locationManager?.removeUpdates(this)
@@ -173,8 +175,9 @@ class RestaurantsListActivity : AppCompatActivity() {
                 currentLat = lastKnowLocation.latitude
                 currentLng = lastKnowLocation.longitude
 
-                //Request restaurants
-                requestRestaurants()
+                //Request the access token
+                viewModel.accessTokenRepository.queryAccessToken()
+                    .observe(this, getAccessTokenObserver())
             } else {
                 locationManager?.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0L, 0f, locationListener)
             }
@@ -185,10 +188,28 @@ class RestaurantsListActivity : AppCompatActivity() {
 
 
     /**
+     * Get an observer to listen the result from
+     * the current access token query
+     */
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    fun getAccessTokenObserver(): Observer<AccessToken> = Observer { accessToken ->
+        accessToken?.let {
+            Toast.makeText(
+                this,
+                "Token obtenido de la base",
+                Toast.LENGTH_LONG
+            ).show()
+            Log.d(TAG, accessToken.accessToken)
+        }
+    }
+
+
+    /**
      * Request the nearest restaurants to the user's location
      */
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     fun requestRestaurants() {
+
         Toast.makeText(
             this,
             "Latitud: ${currentLat} Longitud: ${currentLng}",

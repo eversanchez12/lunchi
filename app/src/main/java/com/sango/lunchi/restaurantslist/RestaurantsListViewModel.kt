@@ -3,6 +3,9 @@ package com.sango.lunchi.restaurantslist
 import android.arch.lifecycle.ViewModel
 import android.databinding.ObservableField
 import android.view.View
+import com.sango.core.db.AppDb
+import com.sango.core.repository.AccessTokenRepository
+import com.sango.core.util.CoreApp
 import com.sango.core.util.SingleLiveEvent
 
 class RestaurantsListViewModel : ViewModel() {
@@ -24,6 +27,11 @@ class RestaurantsListViewModel : ViewModel() {
 
     var clickLiveEvent: SingleLiveEvent<Int> = SingleLiveEvent()
 
+    var accessTokenRepository = AccessTokenRepository(
+        AppDb.instance(CoreApp.instance).accessTokenDao(),
+        CoreApp.instance.provideRetrofit()
+    )
+
     /**
      * Listen the click event in the floating
      * button to change the current user location
@@ -38,6 +46,13 @@ class RestaurantsListViewModel : ViewModel() {
      */
     fun retryLocationClick() {
         clickLiveEvent.value = RETRY_LOCATION_PERMISSION_EVENT
+    }
+
+    /**
+     * Get the nearest restaurants using the given location
+     */
+    fun getRestaurants(){
+
     }
 
 }
