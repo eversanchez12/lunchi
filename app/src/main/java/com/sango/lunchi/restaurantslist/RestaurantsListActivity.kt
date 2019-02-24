@@ -19,7 +19,6 @@ import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.View
 import android.view.animation.AnimationUtils
-import android.widget.Toast
 import com.sango.core.model.AccessToken
 import com.sango.core.model.Restaurant
 import com.sango.core.model.RestaurantResponse
@@ -49,6 +48,7 @@ class RestaurantsListActivity : AppCompatActivity() {
     private lateinit var viewModel: RestaurantsListViewModel
     private lateinit var binding: ActivityRestaurantListBinding
     private lateinit var currentAccessToken: AccessToken
+    private lateinit var adapter: RestaurantListAdapter
     private var currentLat = 0.0
     private var currentLng = 0.0
     private var locationManager: LocationManager? = null
@@ -87,6 +87,10 @@ class RestaurantsListActivity : AppCompatActivity() {
 
         //Here we set the click single event
         viewModel.clickLiveEvent.observe(this, getSingleClickEventObserver())
+
+        //Here we init the adapter
+        adapter = RestaurantListAdapter()
+        rv_restaurants.adapter = adapter
 
         //Check if we have the location permission
         checkLocationPermission()
@@ -212,7 +216,7 @@ class RestaurantsListActivity : AppCompatActivity() {
      */
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     fun requestRestaurants() {
-        viewModel.getRestaurants(currentAccessToken, 1, "$currentLat,$currentLng") { offset ->
+        viewModel.getRestaurants(currentAccessToken, 1, "-34.902852,-56.168325") { offset ->
             viewModel.restaurantRepository.getNextStoresPage(offset).observe(this, getRestaurantRequestObserver())
         }.observe(this, getRestaurantsPageObserver())
     }
@@ -236,9 +240,9 @@ class RestaurantsListActivity : AppCompatActivity() {
     fun getRestaurantRequestObserver(): Observer<ApiResponse<RestaurantResponse>> = Observer { response ->
         when (response) {
             is ApiSuccessResponse -> {
-                if (response.body.total > 0){
+                if (response.body.total > 0) {
                     viewModel.restaurantRepository.updateStoreContent(response.body)
-                }else{
+                } else {
                     viewModel.progressBarVisibility.set(View.INVISIBLE)
                     viewModel.errorMessage.set(getString(R.string.no_result_to_show))
                     viewModel.errorMessageVisibility.set(View.VISIBLE)
@@ -264,12 +268,14 @@ class RestaurantsListActivity : AppCompatActivity() {
     fun getRestaurantsPageObserver(): Observer<PagedList<Restaurant>> = Observer { pagedList ->
         pagedList?.let {
             if (it.isNotEmpty()) {
-                Toast.makeText(
-                    this,
-                    "Datos obtenidos ${pagedList?.size}",
-                    Toast.LENGTH_LONG
-                ).show()
+                adapter.submitList(it)
                 viewModel.progressBarVisibility.set(View.INVISIBLE)
+                if (viewModel.listVisibility.get() == View.INVISIBLE) {
+                    viewModel.listVisibility.set(View.VISIBLE)
+                    viewModel.floatingButtonVisibility.set(View.VISIBLE)
+                    animateView(rv_restaurants)
+                    animateView(bt_location)
+                }
             }
         }
     }

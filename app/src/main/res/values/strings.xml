@@ -7,4 +7,6 @@
     <string name="retry_location_permission">Otorgar permiso</string>
     <string name="no_result_to_show">No se encontraron resultados para mostrar</string>
     <string name="error_during_request">Error realizando su petición</string>
+    <string name="restaurant_address">Dirección</string>
+    <string name="restaurant_delivery_area">Area de cobertura</string>
 </resources>

@@ -14,7 +14,7 @@ interface Api {
         @Query("clientSecret") clientSecret: String
     ): LiveData<ApiResponse<AccessToken>>
 
-    @GET("search/restaurants?max=20&fields=id, name, description, logo, coordinates, deliveryAreas, rating, address")
+    @GET("search/restaurants?sort=name&max=20&fields=id, name, description, logo, coordinates, deliveryAreas, rating, address")
     fun getRestaurants(
         @Query("country") country: Int,
         @Query("point") point: String,
