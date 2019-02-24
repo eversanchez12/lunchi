@@ -30,15 +30,6 @@ class AccessTokenRepository @Inject constructor(
     fun queryAccessToken() = accessTokenDao.getAccessToken()
 
     /**
-     * Clear the access toke from the local database
-     */
-    fun clearAccessToken() {
-        appExecutors.diskIO().execute {
-            accessTokenDao.clearAccessToken()
-        }
-    }
-
-    /**
      * Insert a new access token in the database
      * @param accessToken newest access token object
      */

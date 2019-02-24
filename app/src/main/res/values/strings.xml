@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">Lunchi</string>
     <string name="error_getting_authentication">No fue posible iniciar Lunchi. Por favor intentelo más tarde.</string>
+    <string name="location_permission_message">Lunchi desea acceder a su locación actual para poder ofrecerle los restaurantes más cercanos.</string>
+    <string name="location_permission_denied_message">Lunchi no puede mostrarle resultados si no accede a su locación atual</string>
+    <string name="accept">Aceptar</string>
+    <string name="retry_location_permission">Otorgar permiso</string>
 </resources>

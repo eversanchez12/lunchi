@@ -7,18 +7,18 @@ import android.os.Bundle
 import android.support.annotation.VisibleForTesting
 import android.support.v7.app.AppCompatActivity
 import android.view.View
-import android.widget.Toast
 import com.sango.core.model.AccessToken
 import com.sango.core.util.ApiErrorResponse
 import com.sango.core.util.ApiResponse
 import com.sango.core.util.ApiSuccessResponse
 import com.sango.lunchi.R
 import com.sango.lunchi.databinding.ActivitySplashBinding
+import com.sango.lunchi.restaurantslist.RestaurantsListActivity
 
 class SplashActivity : AppCompatActivity() {
 
-    lateinit var binding: ActivitySplashBinding
-    lateinit var viewModel: SplashViewModel
+    private lateinit var binding: ActivitySplashBinding
+    private lateinit var viewModel: SplashViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,8 +47,9 @@ class SplashActivity : AppCompatActivity() {
                 //Save the new token
                 viewModel.accessTokenRepository.insertToken(response.body)
 
-                //Open the search activity
-                Toast.makeText(this, "Mira el token ${response.body}", Toast.LENGTH_LONG).show()
+                //Open the restaurant activity
+                startActivity(RestaurantsListActivity.getNewInstance(this))
+                finish()
             }
             is ApiErrorResponse -> {
                 viewModel.errorVisibility.set(View.VISIBLE)
