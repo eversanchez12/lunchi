@@ -20,6 +20,6 @@ interface RestaurantDao {
     @Query("DELETE from Restaurant")
     fun clearAllRestaurants()
 
-    @Query("SELECT * from Restaurant where name  ORDER BY name COLLATE NOCASE ASC")
+    @Query("SELECT * from Restaurant ORDER BY name COLLATE NOCASE ASC")
     fun getRestaurants(): DataSource.Factory<Int, Restaurant>
 }

@@ -1,10 +1,15 @@
 package com.sango.lunchi.restaurantslist
 
+import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.ViewModel
+import android.arch.paging.PagedList
 import android.databinding.ObservableField
 import android.view.View
 import com.sango.core.db.AppDb
+import com.sango.core.model.AccessToken
+import com.sango.core.model.Restaurant
 import com.sango.core.repository.AccessTokenRepository
+import com.sango.core.repository.RestaurantRepository
 import com.sango.core.util.CoreApp
 import com.sango.core.util.SingleLiveEvent
 
@@ -25,12 +30,16 @@ class RestaurantsListViewModel : ViewModel() {
 
     var errorMessageVisibility: ObservableField<Int> = ObservableField(View.INVISIBLE)
 
+    var errorMessage: ObservableField<String> = ObservableField("")
+
     var clickLiveEvent: SingleLiveEvent<Int> = SingleLiveEvent()
 
     var accessTokenRepository = AccessTokenRepository(
         AppDb.instance(CoreApp.instance).accessTokenDao(),
         CoreApp.instance.provideRetrofit()
     )
+
+    lateinit var restaurantRepository: RestaurantRepository
 
     /**
      * Listen the click event in the floating
@@ -51,8 +60,23 @@ class RestaurantsListViewModel : ViewModel() {
     /**
      * Get the nearest restaurants using the given location
      */
-    fun getRestaurants(){
+    fun getRestaurants(
+        accessToken: AccessToken,
+        country: Int,
+        point: String,
+        onRequestRestaurants: (offset: Int) -> Unit
+    ) : LiveData<PagedList<Restaurant>>{
 
+        restaurantRepository = RestaurantRepository(
+            AppDb.instance(CoreApp.instance).restaurantDao(),
+            CoreApp.instance.provideRetrofit(accessToken)
+        )
+
+        //Here we clear previous data
+        restaurantRepository.clearPreviousData()
+
+        return restaurantRepository.getRestaurants(country, point, onRequestRestaurants)
     }
+
 
 }

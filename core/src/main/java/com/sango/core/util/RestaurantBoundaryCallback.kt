@@ -4,6 +4,7 @@ import android.arch.paging.PagedList
 import android.support.annotation.VisibleForTesting
 import com.sango.core.db.RestaurantDao
 import com.sango.core.model.Restaurant
+import com.sango.core.model.RestaurantResponse
 import java.util.concurrent.Executor
 import java.util.concurrent.Executors
 
@@ -22,12 +23,17 @@ class RestaurantBoundaryCallback(
     //Total elements
     private var totalElements = 0
 
+    //downloaded elements
+    private var downloadedElements = 0
+
     override fun onZeroItemsLoaded() {
         requestAndSaveData()
     }
 
     override fun onItemAtEndLoaded(itemAtEnd: Restaurant) {
-        requestAndSaveData()
+        if (downloadedElements < totalElements) {
+            requestAndSaveData()
+        }
     }
 
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
@@ -42,13 +48,15 @@ class RestaurantBoundaryCallback(
 
     /**
      * Insert the new data in the local storage
-     * @param restaurants new requested restaurants
+     * @param restaurantResponse new restaurants response
      */
-    fun updateRestaurants(restaurants: List<Restaurant>?) {
+    fun updateRestaurants(restaurantResponse: RestaurantResponse) {
         ioExecutor.execute {
-            dao.insertRestaurants(restaurants)
+            dao.insertRestaurants(restaurantResponse.restaurants)
             lastRequestedOffset += 20
             isRequestInProgress = false
+            totalElements = restaurantResponse.total
+            downloadedElements += restaurantResponse.count
         }
     }
 

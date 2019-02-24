@@ -12,19 +12,19 @@ data class Restaurant(
     @field:SerializedName("id")
     val id: Long,
     @field:SerializedName("name")
-    val name: String,
+    val name: String?,
     @field:SerializedName("description")
-    val description: String,
+    val description: String? = "",
     @field:SerializedName("address")
-    val address: String,
+    val address: String?,
     @field:SerializedName("deliveryAreas")
-    val deliveryAreas: String,
+    val deliveryAreas: String?,
     @field:SerializedName("coordinates")
-    val coordinates: String,
+    val coordinates: String?,
     @field:SerializedName("rating")
-    val rating: String,
+    val rating: String?,
     @field:SerializedName("logo")
-    val logo: String
+    val logo: String?
 ) : Parcelable {
     constructor(source: Parcel) : this(
         source.readLong(),

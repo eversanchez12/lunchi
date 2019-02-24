@@ -5,6 +5,7 @@ import android.arch.paging.LivePagedListBuilder
 import android.arch.paging.PagedList
 import com.sango.core.db.RestaurantDao
 import com.sango.core.model.Restaurant
+import com.sango.core.model.RestaurantResponse
 import com.sango.core.util.Api
 import com.sango.core.util.AppExecutors
 import com.sango.core.util.RestaurantBoundaryCallback
@@ -57,10 +58,10 @@ class RestaurantRepository @Inject constructor(
 
     /**
      * Insert the new data in the local storage
-     * @param restaurants new requested stores
+     * @param restaurantResponse new requested stores
      */
-    fun updateStoreContent(restaurants: List<Restaurant>?) {
-        boundaryCallback.updateRestaurants(restaurants)
+    fun updateStoreContent(restaurantResponse: RestaurantResponse) {
+        boundaryCallback.updateRestaurants(restaurantResponse)
     }
 
     /**
@@ -68,5 +69,16 @@ class RestaurantRepository @Inject constructor(
      */
     fun resetFlags() {
         boundaryCallback.resetFlags()
+    }
+
+    /**
+     * Clear the previous data from the local data base
+     */
+    fun clearPreviousData(){
+        appExecutors.diskIO().execute {
+            restaurantDao.apply {
+                clearAllRestaurants()
+            }
+        }
     }
 }

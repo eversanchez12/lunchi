@@ -54,6 +54,7 @@
                 android:id="@+id/tv_error_message"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:text="@{viewModel.errorMessage}"
                 tools:text="Error message"
                 android:gravity="center"
                 android:layout_margin="30dp"

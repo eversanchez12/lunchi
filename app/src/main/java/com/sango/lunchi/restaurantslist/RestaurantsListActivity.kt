@@ -3,6 +3,7 @@ package com.sango.lunchi.restaurantslist
 import android.Manifest
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
+import android.arch.paging.PagedList
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -20,6 +21,11 @@ import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.Toast
 import com.sango.core.model.AccessToken
+import com.sango.core.model.Restaurant
+import com.sango.core.model.RestaurantResponse
+import com.sango.core.util.ApiErrorResponse
+import com.sango.core.util.ApiResponse
+import com.sango.core.util.ApiSuccessResponse
 import com.sango.lunchi.R
 import com.sango.lunchi.databinding.ActivityRestaurantListBinding
 import com.sango.lunchi.restaurantslist.RestaurantsListViewModel.Companion.CHANGE_LOCATION_EVENT
@@ -42,6 +48,7 @@ class RestaurantsListActivity : AppCompatActivity() {
 
     private lateinit var viewModel: RestaurantsListViewModel
     private lateinit var binding: ActivityRestaurantListBinding
+    private lateinit var currentAccessToken: AccessToken
     private var currentLat = 0.0
     private var currentLng = 0.0
     private var locationManager: LocationManager? = null
@@ -194,12 +201,8 @@ class RestaurantsListActivity : AppCompatActivity() {
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     fun getAccessTokenObserver(): Observer<AccessToken> = Observer { accessToken ->
         accessToken?.let {
-            Toast.makeText(
-                this,
-                "Token obtenido de la base",
-                Toast.LENGTH_LONG
-            ).show()
-            Log.d(TAG, accessToken.accessToken)
+            currentAccessToken = accessToken
+            requestRestaurants()
         }
     }
 
@@ -209,13 +212,11 @@ class RestaurantsListActivity : AppCompatActivity() {
      */
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     fun requestRestaurants() {
-
-        Toast.makeText(
-            this,
-            "Latitud: ${currentLat} Longitud: ${currentLng}",
-            Toast.LENGTH_LONG
-        ).show()
+        viewModel.getRestaurants(currentAccessToken, 1, "$currentLat,$currentLng") { offset ->
+            viewModel.restaurantRepository.getNextStoresPage(offset).observe(this, getRestaurantRequestObserver())
+        }.observe(this, getRestaurantsPageObserver())
     }
+
 
     /**
      * Help to show our view with a fade in
@@ -224,5 +225,52 @@ class RestaurantsListActivity : AppCompatActivity() {
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     fun animateView(view: View) {
         view.startAnimation(AnimationUtils.loadAnimation(this, R.anim.fade_in))
+    }
+
+
+    /**
+     * Return an observer to listen the result in the request to get
+     * all the restaurants
+     */
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    fun getRestaurantRequestObserver(): Observer<ApiResponse<RestaurantResponse>> = Observer { response ->
+        when (response) {
+            is ApiSuccessResponse -> {
+                if (response.body.total > 0){
+                    viewModel.restaurantRepository.updateStoreContent(response.body)
+                }else{
+                    viewModel.progressBarVisibility.set(View.INVISIBLE)
+                    viewModel.errorMessage.set(getString(R.string.no_result_to_show))
+                    viewModel.errorMessageVisibility.set(View.VISIBLE)
+                    animateView(tv_error_message)
+                }
+            }
+            is ApiErrorResponse -> {
+                viewModel.restaurantRepository.resetFlags()
+                viewModel.progressBarVisibility.set(View.INVISIBLE)
+                viewModel.errorMessage.set(getString(R.string.error_during_request))
+                viewModel.errorMessageVisibility.set(View.VISIBLE)
+                animateView(tv_error_message)
+            }
+        }
+    }
+
+
+    /**
+     * Return an observer to listen the change in the stores from
+     * database
+     */
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    fun getRestaurantsPageObserver(): Observer<PagedList<Restaurant>> = Observer { pagedList ->
+        pagedList?.let {
+            if (it.isNotEmpty()) {
+                Toast.makeText(
+                    this,
+                    "Datos obtenidos ${pagedList?.size}",
+                    Toast.LENGTH_LONG
+                ).show()
+                viewModel.progressBarVisibility.set(View.INVISIBLE)
+            }
+        }
     }
 }
