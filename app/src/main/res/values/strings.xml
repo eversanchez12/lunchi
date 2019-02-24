@@ -5,4 +5,6 @@
     <string name="location_permission_denied_message">Lunchi no puede mostrarle resultados si no accede a su locación atual</string>
     <string name="accept">Aceptar</string>
     <string name="retry_location_permission">Otorgar permiso</string>
+    <string name="no_result_to_show">Sin resultados para mostrar</string>
+    <string name="error_during_request">Error realizando su petición</string>
 </resources>

@@ -12,13 +12,13 @@ import com.sango.core.model.AccessToken
  * token related operations.
  */
 @Dao
-abstract class AccessTokenDao {
+interface AccessTokenDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    abstract fun insert(accessToken: AccessToken)
+    fun insert(accessToken: AccessToken)
 
     @Query("SELECT * FROM AccessToken LIMIT 1")
-    abstract fun getAccessToken(): LiveData<AccessToken>
+    fun getAccessToken(): LiveData<AccessToken>
 
     @Query("DELETE from AccessToken")
-    abstract fun clearAccessToken()
+    fun clearAccessToken()
 }
