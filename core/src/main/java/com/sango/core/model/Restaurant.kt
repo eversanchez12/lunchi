@@ -23,7 +23,7 @@ data class Restaurant(
     val coordinates: String,
     @field:SerializedName("rating")
     val rating: String,
-    @field:SerializedName("rating")
+    @field:SerializedName("logo")
     val logo: String
 ) : Parcelable {
     constructor(source: Parcel) : this(
