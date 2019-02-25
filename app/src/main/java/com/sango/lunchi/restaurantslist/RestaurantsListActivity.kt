@@ -1,6 +1,7 @@
 package com.sango.lunchi.restaurantslist
 
 import android.Manifest
+import android.app.Activity
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.arch.paging.PagedList
@@ -39,7 +40,7 @@ class RestaurantsListActivity : AppCompatActivity() {
     companion object {
         var TAG = RestaurantsListActivity::class.java.name ?: ""
         const val LOCATION_PERMISSION_REQUEST_CODE = 101
-        const val PLACE_PICKER_REQUEST_CODE = 102
+        const val LOCATION_PICKER_REQUEST_CODE = 102
 
         /**
          * Return a instance from the RestaurantsListActivity
@@ -118,6 +119,25 @@ class RestaurantsListActivity : AppCompatActivity() {
         }
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        when (requestCode) {
+            LOCATION_PICKER_REQUEST_CODE -> {
+                if (resultCode == Activity.RESULT_OK) {
+                    currentLat = data?.getDoubleExtra(LocationPickerActivity.ARG_LATITUDE, 0.0) ?: 0.0
+                    currentLng = data?.getDoubleExtra(LocationPickerActivity.ARG_LONGITUDE, 0.0) ?: 0.0
+
+                    viewModel.listVisibility.set(View.INVISIBLE)
+                    viewModel.errorMessageVisibility.set(View.INVISIBLE)
+                    viewModel.progressBarVisibility.set(View.VISIBLE)
+                    viewModel.restaurantRepository.clearPreviousData()
+                    adapter.notifyDataSetChanged()
+                    requestRestaurants()
+                }
+            }
+        }
+    }
+
     /**
      * Return an observer to listener the click interaction
      * in the layout
@@ -126,10 +146,12 @@ class RestaurantsListActivity : AppCompatActivity() {
     fun getSingleClickEventObserver(): Observer<Int> = Observer {
         when (it) {
             CHANGE_LOCATION_EVENT -> {
-                startActivityForResult(
-                    LocationPickerActivity.newInstance(this, currentLat, currentLng),
-                    PLACE_PICKER_REQUEST_CODE
-                )
+                if (viewModel.progressBarVisibility.get() == View.INVISIBLE){
+                    startActivityForResult(
+                        LocationPickerActivity.newInstance(this, currentLat, currentLng),
+                        LOCATION_PICKER_REQUEST_CODE
+                    )
+                }
             }
             RETRY_LOCATION_PERMISSION_EVENT -> {
                 viewModel.errorLocationVisibility.set(View.INVISIBLE)
@@ -224,7 +246,7 @@ class RestaurantsListActivity : AppCompatActivity() {
      */
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     fun requestRestaurants() {
-        viewModel.getRestaurants(currentAccessToken, 1, "-34.902852,-56.168325") { offset ->
+        viewModel.getRestaurants(currentAccessToken, 1, "$currentLat,$currentLng") { offset ->
             viewModel.restaurantRepository.getNextStoresPage(offset).observe(this, getRestaurantRequestObserver())
         }.observe(this, getRestaurantsPageObserver())
     }
@@ -255,6 +277,10 @@ class RestaurantsListActivity : AppCompatActivity() {
                     viewModel.errorMessage.set(getString(R.string.no_result_to_show))
                     viewModel.errorMessageVisibility.set(View.VISIBLE)
                     animateView(tv_error_message)
+                    if (viewModel.floatingButtonVisibility.get() == View.INVISIBLE){
+                        viewModel.floatingButtonVisibility.set(View.VISIBLE)
+                        animateView(bt_location)
+                    }
                 }
             }
             is ApiErrorResponse -> {
