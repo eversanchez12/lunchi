@@ -21,7 +21,10 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 tools:visibility="invisible"
+                android:scrollbars="vertical"
                 android:overScrollMode="never"
+                android:scrollbarThumbVertical="@android:color/darker_gray"
+                android:scrollbarSize="5dp"
                 android:visibility="@{viewModel.listVisibility}"
                 app:layoutManager="android.support.v7.widget.LinearLayoutManager"
                 android:layout_height="match_parent"/>

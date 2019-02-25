@@ -9,4 +9,5 @@
     <string name="error_during_request">Error realizando su petición</string>
     <string name="restaurant_address">Dirección</string>
     <string name="restaurant_delivery_area">Area de cobertura</string>
+    <string name="restaurant_nearest">Restaurantes cercanos</string>
 </resources>

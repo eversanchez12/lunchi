@@ -94,6 +94,8 @@ class RestaurantsListActivity : AppCompatActivity() {
 
         //Check if we have the location permission
         checkLocationPermission()
+
+        //here we set title
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
