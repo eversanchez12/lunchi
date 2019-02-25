@@ -19,6 +19,7 @@ import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.view.animation.AnimationUtils
 import com.sango.core.model.AccessToken
@@ -32,6 +33,7 @@ import com.sango.lunchi.databinding.ActivityRestaurantListBinding
 import com.sango.lunchi.locationpicker.LocationPickerActivity
 import com.sango.lunchi.restaurantslist.RestaurantsListViewModel.Companion.CHANGE_LOCATION_EVENT
 import com.sango.lunchi.restaurantslist.RestaurantsListViewModel.Companion.RETRY_LOCATION_PERMISSION_EVENT
+import com.sango.lunchi.restaurantsmap.RestaurantMapsActivity
 import kotlinx.android.synthetic.main.activity_restaurant_list.*
 import org.jetbrains.anko.alert
 
@@ -106,6 +108,17 @@ class RestaurantsListActivity : AppCompatActivity() {
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_map, menu)
         return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when(item?.itemId){
+            R.id.menu_map->{
+                if (viewModel.listVisibility.get() == View.VISIBLE){
+                    startActivity(RestaurantMapsActivity.newInstance(this,currentLat,currentLng))
+                }
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {

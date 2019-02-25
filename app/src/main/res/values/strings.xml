@@ -15,7 +15,9 @@
     </string>
     <string name="accept">Aceptar</string>
     <string name="retry_location_permission">Otorgar permiso</string>
-    <string name="no_result_to_show">No se encontraron resultados para mostrar en su locación actual. \nItente seleccionado una nueva.</string>
+    <string name="no_result_to_show">No se encontraron resultados para mostrar en su locación actual. \nItente
+        seleccionado una nueva.
+    </string>
     <string name="error_during_request">Error realizando su petición</string>
     <string name="restaurant_address">Dirección</string>
     <string name="restaurant_delivery_area">Area de cobertura</string>

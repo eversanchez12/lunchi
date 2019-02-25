@@ -81,4 +81,9 @@ class RestaurantRepository @Inject constructor(
             }
         }
     }
+
+    /**
+     * Get all the restaurants from the database
+     */
+    fun queryRestaurants() = restaurantDao.getAllRestaurants()
 }
