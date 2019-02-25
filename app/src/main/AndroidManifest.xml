@@ -37,11 +37,6 @@
                 android:value="@string/google_maps_key"/>
 
         <activity
-                android:name=".locationpicker.LocationPickerActivity"
-                android:label="@string/title_activity_location_picker"
-                android:screenOrientation="portrait">
-        </activity>
-        <activity
                 android:name=".splash.SplashActivity"
                 android:screenOrientation="portrait"
                 android:theme="@style/SplashTheme">
@@ -55,6 +50,11 @@
                 android:name=".restaurantslist.RestaurantsListActivity"
                 android:label="@string/restaurant_nearest"
                 android:screenOrientation="portrait"/>
+        <activity
+                android:name=".locationpicker.LocationPickerActivity"
+                android:label="@string/title_activity_location_picker"
+                android:screenOrientation="portrait">
+        </activity>
     </application>
 
 </manifest>

@@ -18,6 +18,7 @@ import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
+import android.view.Menu
 import android.view.View
 import android.view.animation.AnimationUtils
 import com.sango.core.model.AccessToken
@@ -102,6 +103,11 @@ class RestaurantsListActivity : AppCompatActivity() {
         checkLocationPermission()
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_map, menu)
+        return true
+    }
+
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when (requestCode) {
@@ -146,7 +152,7 @@ class RestaurantsListActivity : AppCompatActivity() {
     fun getSingleClickEventObserver(): Observer<Int> = Observer {
         when (it) {
             CHANGE_LOCATION_EVENT -> {
-                if (viewModel.progressBarVisibility.get() == View.INVISIBLE){
+                if (viewModel.progressBarVisibility.get() == View.INVISIBLE) {
                     startActivityForResult(
                         LocationPickerActivity.newInstance(this, currentLat, currentLng),
                         LOCATION_PICKER_REQUEST_CODE
@@ -277,7 +283,7 @@ class RestaurantsListActivity : AppCompatActivity() {
                     viewModel.errorMessage.set(getString(R.string.no_result_to_show))
                     viewModel.errorMessageVisibility.set(View.VISIBLE)
                     animateView(tv_error_message)
-                    if (viewModel.floatingButtonVisibility.get() == View.INVISIBLE){
+                    if (viewModel.floatingButtonVisibility.get() == View.INVISIBLE) {
                         viewModel.floatingButtonVisibility.set(View.VISIBLE)
                         animateView(bt_location)
                     }
