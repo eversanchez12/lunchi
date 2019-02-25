@@ -27,16 +27,19 @@ import com.sango.core.util.ApiResponse
 import com.sango.core.util.ApiSuccessResponse
 import com.sango.lunchi.R
 import com.sango.lunchi.databinding.ActivityRestaurantListBinding
+import com.sango.lunchi.locationpicker.LocationPickerActivity
 import com.sango.lunchi.restaurantslist.RestaurantsListViewModel.Companion.CHANGE_LOCATION_EVENT
 import com.sango.lunchi.restaurantslist.RestaurantsListViewModel.Companion.RETRY_LOCATION_PERMISSION_EVENT
 import kotlinx.android.synthetic.main.activity_restaurant_list.*
 import org.jetbrains.anko.alert
+
 
 class RestaurantsListActivity : AppCompatActivity() {
 
     companion object {
         var TAG = RestaurantsListActivity::class.java.name ?: ""
         const val LOCATION_PERMISSION_REQUEST_CODE = 101
+        const val PLACE_PICKER_REQUEST_CODE = 102
 
         /**
          * Return a instance from the RestaurantsListActivity
@@ -52,6 +55,7 @@ class RestaurantsListActivity : AppCompatActivity() {
     private var currentLat = 0.0
     private var currentLng = 0.0
     private var locationManager: LocationManager? = null
+
     //Here we define the callback when the user location is get
     private val locationListener: LocationListener = object : LocationListener {
         override fun onLocationChanged(location: Location) {
@@ -85,6 +89,7 @@ class RestaurantsListActivity : AppCompatActivity() {
         //Get reference to location manager
         locationManager = getSystemService(LOCATION_SERVICE) as LocationManager
 
+
         //Here we set the click single event
         viewModel.clickLiveEvent.observe(this, getSingleClickEventObserver())
 
@@ -94,8 +99,6 @@ class RestaurantsListActivity : AppCompatActivity() {
 
         //Check if we have the location permission
         checkLocationPermission()
-
-        //here we set title
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
@@ -123,7 +126,10 @@ class RestaurantsListActivity : AppCompatActivity() {
     fun getSingleClickEventObserver(): Observer<Int> = Observer {
         when (it) {
             CHANGE_LOCATION_EVENT -> {
-
+                startActivityForResult(
+                    LocationPickerActivity.newInstance(this, currentLat, currentLng),
+                    PLACE_PICKER_REQUEST_CODE
+                )
             }
             RETRY_LOCATION_PERMISSION_EVENT -> {
                 viewModel.errorLocationVisibility.set(View.INVISIBLE)
