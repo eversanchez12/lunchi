@@ -5,12 +5,13 @@ import android.arch.persistence.room.Room
 import android.arch.persistence.room.RoomDatabase
 import android.content.Context
 import com.sango.core.model.AccessToken
+import com.sango.core.model.Restaurant
 
 /**
  * Main database description.
  */
 @Database(
-    entities = [AccessToken::class],
+    entities = [AccessToken::class, Restaurant::class],
     version = 1,
     exportSchema = false
 )
@@ -30,4 +31,6 @@ abstract class AppDb : RoomDatabase() {
     }
 
     abstract fun accessTokenDao(): AccessTokenDao
+
+    abstract fun restaurantDao(): RestaurantDao
 }

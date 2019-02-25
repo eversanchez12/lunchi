@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable name="restaurant"
+                  type="com.sango.core.model.Restaurant"/>
+    </data>
+
+    <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:minHeight="50dp"
+            android:layout_margin="10dp"
+            android:layout_height="wrap_content">
+
+        <android.support.constraint.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+
+            <android.support.constraint.ConstraintLayout
+                    android:id="@+id/cl_header"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent">
+
+                <ImageView
+                        android:id="@+id/iv_logo"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toStartOf="@id/tv_name"
+                        android:layout_margin="20dp"
+                        android:background="@color/colorSilverGrey"
+                        app:imageUrlRoundedCorners="@{restaurant.logo}"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        tools:ignore="ContentDescription"/>
+
+                <TextView
+                        android:id="@+id/tv_name"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintStart_toEndOf="@id/iv_logo"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginEnd="20dp"
+                        android:textStyle="bold"
+                        android:textSize="16sp"
+                        android:text="@{restaurant.name}"
+                        tools:text="Restaurant name"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toTopOf="@id/tv_description"/>
+
+                <TextView
+                        android:id="@+id/tv_description"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintStart_toStartOf="@id/tv_name"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:layout_marginEnd="20dp"
+                        android:text="@{restaurant.description}"
+                        tools:text="Restaurant description"
+                        app:layout_constraintTop_toBottomOf="@id/tv_name"
+                        app:layout_constraintBottom_toTopOf="@id/tv_address_tag"/>
+
+                <TextView
+                        android:id="@+id/tv_address_tag"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintStart_toStartOf="@id/tv_name"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginEnd="20dp"
+                        android:textStyle="bold"
+                        android:text="@string/restaurant_address"
+                        app:layout_constraintTop_toBottomOf="@id/tv_description"
+                        app:layout_constraintBottom_toTopOf="@id/tv_address"/>
+
+                <TextView
+                        android:id="@+id/tv_address"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintStart_toStartOf="@id/tv_name"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:layout_marginEnd="20dp"
+                        tools:text="Restaurant address"
+                        android:text="@{restaurant.address}"
+                        app:layout_constraintTop_toBottomOf="@id/tv_address_tag"/>
+
+            </android.support.constraint.ConstraintLayout>
+
+            <TextView
+                    android:id="@+id/tv_delivery_area_tag"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginStart="20dp"
+                    android:textStyle="bold"
+                    android:text="@string/restaurant_delivery_area"
+                    app:layout_constraintTop_toBottomOf="@id/cl_header"
+                    app:layout_constraintBottom_toTopOf="@id/tv_delivery_area"/>
+
+            <TextView
+                    android:id="@+id/tv_delivery_area"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginBottom="20dp"
+                    android:layout_marginStart="20dp"
+                    android:text="@{restaurant.deliveryAreas}"
+                    tools:text="Delivery area description"
+                    app:layout_constraintTop_toBottomOf="@id/tv_delivery_area_tag"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
+
+        </android.support.constraint.ConstraintLayout>
+
+    </android.support.v7.widget.CardView>
+</layout>
