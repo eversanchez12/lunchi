@@ -1,13 +1,22 @@
 <resources>
     <string name="app_name">Lunchi</string>
     <string name="error_getting_authentication">No fue posible iniciar Lunchi. Por favor intentelo más tarde.</string>
-    <string name="location_permission_message">Lunchi desea acceder a su locación actual para poder ofrecerle los restaurantes más cercanos.</string>
-    <string name="location_permission_denied_message">Lunchi no puede mostrarle resultados si no accede a su locación atual</string>
+    <string name="location_permission_message">Lunchi desea acceder a su locación actual para poder ofrecerle los
+        restaurantes más cercanos.
+    </string>
+    <string name="location_permission_denied_message">Lunchi no puede mostrarle resultados si no accede a su locación
+        atual
+    </string>
     <string name="accept">Aceptar</string>
     <string name="retry_location_permission">Otorgar permiso</string>
-    <string name="no_result_to_show">No se encontraron resultados para mostrar</string>
+    <string name="no_result_to_show">No se encontraron resultados para mostrar en su locación actual. \nItente seleccionado una nueva.</string>
     <string name="error_during_request">Error realizando su petición</string>
     <string name="restaurant_address">Dirección</string>
     <string name="restaurant_delivery_area">Area de cobertura</string>
     <string name="restaurant_nearest">Restaurantes cercanos</string>
+    <string name="no_implemented_yet">Esta funcionalidad aun no ha sido implementada</string>
+    <string name="title_activity_location_picker">Seleccione una locación</string>
+    <string name="current_location">Locación actual</string>
+    <string name="select">Seleccionar</string>
+    <string name="select_a_location">Toca un punto en el mapa para\n seleccionar dicha locación</string>
 </resources>
