@@ -1,5 +1,6 @@
 package com.sango.core.db
 
+import android.arch.lifecycle.LiveData
 import android.arch.paging.DataSource
 import android.arch.persistence.room.Dao
 import android.arch.persistence.room.Insert
@@ -22,4 +23,7 @@ interface RestaurantDao {
 
     @Query("SELECT * from Restaurant ORDER BY name COLLATE NOCASE ASC")
     fun getRestaurants(): DataSource.Factory<Int, Restaurant>
+
+    @Query("SELECT * from Restaurant ORDER BY name COLLATE NOCASE ASC")
+    fun getAllRestaurants(): LiveData<List<Restaurant>>
 }
